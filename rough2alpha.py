@@ -2,6 +2,7 @@
 Rough2Alpha
 """
 import argparse
+import os
 from PIL import Image, ImageOps
 
 def convert(target_file, source_file, suffix='AlphaRough'):
@@ -16,15 +17,14 @@ def convert(target_file, source_file, suffix='AlphaRough'):
 
     # We should convert in L image mode before injecting it as the alpha channel
     source_inverted = source_inverted.convert('L')
-    source_inverted.save('inverted.jpg')
 
-    filename, ext = target_file.split('.')
+    filename, ext = os.path.splitext(target_file)
 
     # Make sure we don't use jpg as it doesn't support alpha channel
     ext = 'png' if ext == 'jpg' else ext
 
     target_img.putalpha(source_inverted)
-    target_img.save('%s_%s.%s' % (target_file.split('.')[0], suffix, ext))
+    target_img.save('%s_%s%s' % (filename, suffix, ext))
 
 
 if __name__ == '__main__':
